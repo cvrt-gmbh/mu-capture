@@ -1,0 +1,61 @@
+# Changelog
+
+All notable changes to MikroskopCapture will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.2.0] - 2026-01-07
+
+### Added
+- **Device Selector Dropdown** - Click device name in header to switch capture device instantly
+- **Refresh Devices** option in device dropdown menu
+- Explanation text in Settings clarifying preferred vs active device
+
+### Changed
+- Settings "CAPTURE DEVICE" renamed to "PREFERRED DEVICE" for clarity
+- Settings panel now stretches to fill available space (no longer fixed width)
+- Tab bar in settings now always visible across all tabs
+- Text fields in Naming tab now stretch to fill available width
+
+### Fixed
+- Tab bar disappearing when viewing NAMING tab in settings
+- Settings panel centered with fixed width - now responsive
+
+## [0.1.0] - 2026-01-07
+
+### Added
+- **Live Preview** - Real-time video feed from capture device
+- **Photo Capture** - Capture current frame as image
+- **Video Recording** - Record video with live duration timer
+- **Save Dialog** - Custom filename input after each capture
+- **Settings Panel** - Device, storage path, file naming configuration
+- **Keyboard Shortcuts** - `F` for photo, `V` for video
+- **Auto Device Detection** - Automatically selects first external device
+- **Multiple Image Formats** - JPEG, PNG, TIFF support
+- **Multiple Video Formats** - MOV, MP4 support
+- **Date in Filename** - Configurable date format options
+- **Prefix/Suffix** - Custom filename prefix and suffix
+- **Network Storage** - Support for saving to network drives
+- **8-bit Terminal Design** - Clean retro aesthetic with SF Mono font
+
+### Technical
+- Built with Swift 5.9 and SwiftUI
+- Uses AVFoundation for video capture
+- Swift Package Manager for dependencies
+- Requires macOS 14.0 (Sonoma) or later
+
+---
+
+## Version History
+
+| Version | Date | Summary |
+|---------|------|---------|
+| 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
+| 0.1.0 | 2026-01-07 | Initial MVP release |
+
+[Unreleased]: https://github.com/cvrt-gmbh/mikroskop-capture/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/cvrt-gmbh/mikroskop-capture/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/cvrt-gmbh/mikroskop-capture/releases/tag/v0.1.0
