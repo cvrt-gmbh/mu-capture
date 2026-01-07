@@ -31,6 +31,12 @@ cp "$BUILD_DIR/$APP_NAME" "$MACOS_DIR/"
 # Kopiere Info.plist
 cp "Sources/$APP_NAME/Info.plist" "$CONTENTS_DIR/"
 
+# Kopiere App Icon
+if [ -f "AppIcon.icns" ]; then
+    cp "AppIcon.icns" "$RESOURCES_DIR/"
+    echo "🎨 App icon added"
+fi
+
 # Erstelle PkgInfo
 echo -n "APPL????" > "$CONTENTS_DIR/PkgInfo"
 
