@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>MikroskopCapture</string>
+    <key>CFBundleDisplayName</key>
+    <string>Mikroskop Capture</string>
+    <key>CFBundleIdentifier</key>
+    <string>de.coffeebreak.MikroskopCapture</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleExecutable</key>
+    <string>MikroskopCapture</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Diese App benötigt Zugriff auf die Kamera/Capture-Karte um das Mikroskop-Bild anzuzeigen und aufzunehmen.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Diese App kann optional Audio aufnehmen.</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.medical</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+</dict>
+</plist>
