@@ -43,10 +43,21 @@ echo -n "APPL????" > "$CONTENTS_DIR/PkgInfo"
 # Setze Executable-Rechte
 chmod +x "$MACOS_DIR/$APP_NAME"
 
-echo "✅ App bundle created: $APP_BUNDLE"
+# Code Signing (Ad-hoc) - verhindert "App ist beschädigt" auf anderen Macs
+echo "🔐 Signing app bundle..."
+codesign --force --deep --sign - "$APP_BUNDLE"
+
+# Quarantäne-Attribut entfernen (für lokale Builds)
+xattr -cr "$APP_BUNDLE" 2>/dev/null || true
+
+echo "✅ App bundle created and signed: $APP_BUNDLE"
 echo ""
 echo "📍 Um die App zu installieren:"
 echo "   cp -r $APP_BUNDLE /Applications/"
 echo ""
 echo "🚀 Oder direkt starten:"
 echo "   open $APP_BUNDLE"
+echo ""
+echo "💡 Falls auf anderem Mac 'beschädigt' erscheint:"
+echo "   xattr -cr /Pfad/zu/$APP_BUNDLE"
+echo "   oder: Rechtsklick → Öffnen (beim ersten Start)"
