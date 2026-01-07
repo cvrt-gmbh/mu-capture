@@ -65,6 +65,7 @@ struct ContentView: View {
     @State private var customFileName = ""
     @State private var isVideo = false
     @State private var captureTimestamp: Date?
+    @State private var showDeviceMenu = false
     
     var body: some View {
         ZStack {
@@ -139,20 +140,55 @@ struct ContentView: View {
         return event
     }
     
-    // MARK: - Header (ohne Timer - nur Device + Settings)
+    // MARK: - Header (Device Selector + Settings)
     
     private var headerView: some View {
         HStack(spacing: 16) {
-            // Status Indicator
-            HStack(spacing: 8) {
-                Text("●")
-                    .font(.system(size: 10))
-                    .foregroundColor(cameraManager.selectedDevice != nil ? DesignSystem.accent : DesignSystem.danger)
+            // Device Selector (clickable)
+            Menu {
+                ForEach(cameraManager.availableDevices, id: \.uniqueID) { device in
+                    Button(action: {
+                        cameraManager.selectDevice(device)
+                    }) {
+                        HStack {
+                            if cameraManager.selectedDevice?.uniqueID == device.uniqueID {
+                                Text("●")
+                            }
+                            Text(device.localizedName)
+                            if device.deviceType == .external {
+                                Text("EXT")
+                            }
+                        }
+                    }
+                }
                 
-                Text(cameraManager.selectedDevice?.localizedName.uppercased() ?? "NO DEVICE")
-                    .font(DesignSystem.mono)
-                    .foregroundColor(DesignSystem.textPrimary)
+                if cameraManager.availableDevices.isEmpty {
+                    Text("No devices found")
+                        .foregroundColor(DesignSystem.textSecondary)
+                }
+                
+                Divider()
+                
+                Button(action: { cameraManager.discoverDevices() }) {
+                    Text("Refresh Devices")
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Text("●")
+                        .font(.system(size: 10))
+                        .foregroundColor(cameraManager.selectedDevice != nil ? DesignSystem.accent : DesignSystem.danger)
+                    
+                    Text(cameraManager.selectedDevice?.localizedName.uppercased() ?? "NO DEVICE")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(DesignSystem.textPrimary)
+                    
+                    Text("▼")
+                        .font(.system(size: 8))
+                        .foregroundColor(DesignSystem.textSecondary)
+                }
             }
+            .menuStyle(.borderlessButton)
+            .fixedSize()
             
             Spacer()
             

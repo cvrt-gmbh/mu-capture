@@ -17,18 +17,20 @@ struct SettingsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Tab Bar
+            // Tab Bar - always visible
             HStack(spacing: 0) {
                 TabButton(title: "DEVICE", index: 0, selectedTab: $selectedTab)
                 TabButton(title: "STORAGE", index: 1, selectedTab: $selectedTab)
                 TabButton(title: "NAMING", index: 2, selectedTab: $selectedTab)
+                Spacer()
             }
+            .frame(maxWidth: .infinity)
             .background(DesignSystem.bgSecondary)
             
             Divider()
                 .background(DesignSystem.border)
             
-            // Content
+            // Content - stretches to fill available space
             Group {
                 switch selectedTab {
                 case 0:
@@ -41,10 +43,11 @@ struct SettingsView: View {
                     deviceTab
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(DesignSystem.bg)
         }
-        .frame(width: 480, height: 380)
+        .frame(minWidth: 500, minHeight: 400)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DesignSystem.bg)
         .onAppear {
             cameraManager.discoverDevices()
@@ -55,7 +58,13 @@ struct SettingsView: View {
     
     private var deviceTab: some View {
         VStack(alignment: .leading, spacing: 20) {
-            SectionHeader(title: "CAPTURE DEVICE")
+            SectionHeader(title: "PREFERRED DEVICE")
+            
+            // Explanation
+            Text("Device to use on app startup. Click device name in header to switch during use.")
+                .font(DesignSystem.monoSmall)
+                .foregroundColor(DesignSystem.textSecondary.opacity(0.7))
+                .padding(.bottom, 8)
             
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(cameraManager.availableDevices, id: \.uniqueID) { device in
@@ -91,6 +100,7 @@ struct SettingsView: View {
                     }
                 )
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             Spacer()
             
@@ -101,6 +111,7 @@ struct SettingsView: View {
             }
             .buttonStyle(.plain)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(24)
     }
     
@@ -187,10 +198,13 @@ struct SettingsView: View {
                         }
                     }
                 }
+                
+                Spacer()
             }
             
             Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(24)
     }
     
@@ -211,7 +225,7 @@ struct SettingsView: View {
                         .foregroundColor(DesignSystem.textPrimary)
                         .textFieldStyle(.plain)
                         .padding(10)
-                        .frame(width: 120)
+                        .frame(maxWidth: .infinity)
                         .background(DesignSystem.bgSecondary)
                         .overlay(
                             Rectangle()
@@ -229,7 +243,7 @@ struct SettingsView: View {
                         .foregroundColor(DesignSystem.textPrimary)
                         .textFieldStyle(.plain)
                         .padding(10)
-                        .frame(width: 120)
+                        .frame(maxWidth: .infinity)
                         .background(DesignSystem.bgSecondary)
                         .overlay(
                             Rectangle()
@@ -278,6 +292,7 @@ struct SettingsView: View {
                             settings.dateFormat = "dd-MM-yyyy"
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
             
@@ -292,8 +307,10 @@ struct SettingsView: View {
                 Text(settings.generateFileName(baseName: "sample", isVideo: false))
                     .font(DesignSystem.mono)
                     .foregroundColor(DesignSystem.accent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(24)
     }
     
