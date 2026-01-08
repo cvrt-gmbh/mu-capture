@@ -144,35 +144,8 @@ struct ContentView: View {
     
     private var headerView: some View {
         HStack(spacing: 16) {
-            // Device Selector (clickable)
-            Menu {
-                ForEach(cameraManager.availableDevices, id: \.uniqueID) { device in
-                    Button(action: {
-                        cameraManager.selectDevice(device)
-                    }) {
-                        HStack {
-                            if cameraManager.selectedDevice?.uniqueID == device.uniqueID {
-                                Text("●")
-                            }
-                            Text(device.localizedName)
-                            if device.deviceType == .external {
-                                Text("EXT")
-                            }
-                        }
-                    }
-                }
-                
-                if cameraManager.availableDevices.isEmpty {
-                    Text("No devices found")
-                        .foregroundColor(DesignSystem.textSecondary)
-                }
-                
-                Divider()
-                
-                Button(action: { cameraManager.discoverDevices() }) {
-                    Text("Refresh Devices")
-                }
-            } label: {
+            // Device Selector Button with Popover Menu
+            Button(action: { showDeviceMenu.toggle() }) {
                 HStack(spacing: 8) {
                     Text("●")
                         .font(.system(size: 10))
@@ -181,16 +154,99 @@ struct ContentView: View {
                     Text(cameraManager.selectedDevice?.localizedName.uppercased() ?? "NO DEVICE")
                         .font(DesignSystem.mono)
                         .foregroundColor(DesignSystem.textPrimary)
-                    
-                    Text("▼")
-                        .font(.system(size: 8))
-                        .foregroundColor(DesignSystem.textSecondary)
                 }
             }
-            .menuStyle(.borderlessButton)
-            .fixedSize()
+            .buttonStyle(.plain)
+            .popover(isPresented: $showDeviceMenu, arrowEdge: .bottom) {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(cameraManager.availableDevices, id: \.uniqueID) { device in
+                        Button(action: {
+                            cameraManager.selectDevice(device)
+                            showDeviceMenu = false
+                        }) {
+                            HStack(spacing: 8) {
+                                Text("●")
+                                    .font(.system(size: 8))
+                                    .foregroundColor(cameraManager.selectedDevice?.uniqueID == device.uniqueID ? DesignSystem.accent : .clear)
+                                
+                                Text(device.localizedName)
+                                    .font(DesignSystem.mono)
+                                    .foregroundColor(DesignSystem.textPrimary)
+                                
+                                if device.deviceType == .external {
+                                    Text("EXT")
+                                        .font(DesignSystem.monoSmall)
+                                        .foregroundColor(DesignSystem.textSecondary)
+                                }
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .background(cameraManager.selectedDevice?.uniqueID == device.uniqueID ? DesignSystem.accent.opacity(0.1) : Color.clear)
+                    }
+                    
+                    if cameraManager.availableDevices.isEmpty {
+                        Text("No devices found")
+                            .font(DesignSystem.mono)
+                            .foregroundColor(DesignSystem.textSecondary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                    }
+                    
+                    Divider()
+                        .background(DesignSystem.border)
+                    
+                    Button(action: {
+                        cameraManager.discoverDevices()
+                        showDeviceMenu = false
+                    }) {
+                        Text("Refresh Devices")
+                            .font(DesignSystem.mono)
+                            .foregroundColor(DesignSystem.textSecondary)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .frame(minWidth: 200)
+                .background(DesignSystem.bgSecondary)
+            }
+            
+            // Version Number with repo link (left side, next to device)
+            Button(action: openRepoURL) {
+                Text("v0.2.0")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary.opacity(0.5))
+            }
+            .buttonStyle(.plain)
+            .onHover { hovering in
+                if hovering {
+                    NSCursor.pointingHand.push()
+                } else {
+                    NSCursor.pop()
+                }
+            }
             
             Spacer()
+            
+            // Media Button - opens save folder
+            Button(action: openMediaFolder) {
+                Text("/ MEDIA")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+            }
+            .buttonStyle(.plain)
+            .onHover { hovering in
+                if hovering {
+                    NSCursor.pointingHand.push()
+                } else {
+                    NSCursor.pop()
+                }
+            }
             
             // Settings Button
             Button(action: { showSettings = true }) {
@@ -312,6 +368,24 @@ struct ContentView: View {
             cameraManager.stopVideoRecording()
         } else {
             cameraManager.startVideoRecording()
+        }
+    }
+    
+    private func openMediaFolder() {
+        let path: String
+        if settings.savePath.hasPrefix("~") {
+            path = NSString(string: settings.savePath).expandingTildeInPath
+        } else {
+            path = settings.savePath
+        }
+        
+        let url = URL(fileURLWithPath: path)
+        NSWorkspace.shared.open(url)
+    }
+    
+    private func openRepoURL() {
+        if let url = URL(string: "https://github.com/cvrt-gmbh/mikroskop-capture") {
+            NSWorkspace.shared.open(url)
         }
     }
     
