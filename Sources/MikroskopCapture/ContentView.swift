@@ -561,6 +561,7 @@ struct SaveDialogView: View {
                                 .stroke(DesignSystem.border, lineWidth: 1)
                         )
                         .focused($isTextFieldFocused)
+                        .onSubmit { onSave() }
                 }
                 
                 // Filename Preview
