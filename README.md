@@ -143,4 +143,4 @@ For commercial licensing, contact: info@cavort.de
 
 ---
 
-*Built by [CVRT GmbH](https://cvrt.dev)*
+*Built by [CAVORT Konzepte GmbH](https://cavort.de)*
