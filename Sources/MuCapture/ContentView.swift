@@ -276,7 +276,7 @@ struct ContentView: View {
             
             // Version Number with repo link (left side, next to device)
             Button(action: openRepoURL) {
-                Text("v1.0.1")
+                Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
                     .font(DesignSystem.monoSmall)
                     .foregroundColor(DesignSystem.textSecondary.opacity(0.5))
             }
