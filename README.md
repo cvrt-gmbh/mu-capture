@@ -22,6 +22,18 @@ Native macOS app for capturing microscope images and videos via capture cards (E
 
 ### Homebrew (Recommended)
 
+If you don't have Homebrew installed yet:
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+After installation, add Homebrew to your shell (Apple Silicon Macs):
+```bash
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+Then install μCapture:
 ```bash
 brew install cvrt-gmbh/cask/mucapture
 ```
