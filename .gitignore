@@ -12,3 +12,11 @@ DerivedData/
 
 # App bundle (built locally)
 *.app/
+
+# Release artifacts
+*.zip
+
+# Icon source files (only AppIcon.icns is needed)
+AppIcon_1024.png
+AppIcon.svg
+AppIcon.iconset/
