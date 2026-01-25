@@ -1,6 +1,6 @@
 cask "mucapture" do
   version "1.0.0"
-  sha256 :no_check # Will be updated after first release
+  sha256 "f48b038779343aecf51133d1d30a5692163ec56e13d2d283d13c9c41cfa1c77a"
 
   url "https://github.com/cvrt-gmbh/mu-capture/releases/download/v#{version}/muCapture-#{version}.zip"
   name "μCapture"
