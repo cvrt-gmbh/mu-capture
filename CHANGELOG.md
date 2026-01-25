@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-01-25
+
+### Fixed
+- **App bundle renamed** to `MuCapture.app` for Spotlight/Launchpad compatibility (was `μCapture.app`)
+
+## [1.0.1] - 2026-01-25
+
+### Fixed
+- Version now reads from Info.plist instead of hardcoded value
+- App icon centered properly in dock
+
+### Added
+- Homebrew Cask support via `brew install cvrt-gmbh/cask/mucapture`
+
 ## [1.0.0] - 2026-01-25
 
 ### Changed
@@ -67,11 +81,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.2 | 2026-01-25 | App bundle renamed for Spotlight compatibility |
+| 1.0.1 | 2026-01-25 | Version fix, centered icon, Homebrew support |
 | 1.0.0 | 2026-01-25 | Rebrand to μCapture, Catppuccin design, Homebrew support |
 | 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cvrt-gmbh/mu-capture/compare/v0.2.0...v1.0.0
 [0.2.0]: https://github.com/cvrt-gmbh/mu-capture/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/cvrt-gmbh/mu-capture/releases/tag/v0.1.0
