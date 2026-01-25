@@ -10,6 +10,7 @@ import SwiftUI
 import AVFoundation
 
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject private var settings = AppSettings.shared
     @StateObject private var cameraManager = CameraManager()
     
@@ -24,6 +25,7 @@ struct SettingsView: View {
                 TabButton(title: "NAMING", index: 2, selectedTab: $selectedTab)
                 TabButton(title: "KEYS", index: 3, selectedTab: $selectedTab)
                 TabButton(title: "FEEDBACK", index: 4, selectedTab: $selectedTab)
+                TabButton(title: "INFO", index: 5, selectedTab: $selectedTab)
                 Spacer()
             }
             .frame(maxWidth: .infinity)
@@ -45,6 +47,8 @@ struct SettingsView: View {
                     keysTab
                 case 4:
                     feedbackTab
+                case 5:
+                    infoTab
                 default:
                     deviceTab
                 }
@@ -52,11 +56,14 @@ struct SettingsView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(DesignSystem.bg)
         }
-        .frame(minWidth: 500, minHeight: 400)
+        .frame(minWidth: 620, minHeight: 400)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(DesignSystem.bg)
         .onAppear {
             cameraManager.discoverDevices()
+        }
+        .onExitCommand {
+            dismiss()
         }
     }
     
@@ -546,7 +553,143 @@ struct SettingsView: View {
         .padding(24)
     }
     
+    // MARK: - Info Tab
+    
+    private var infoTab: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            // App Info
+            HStack(spacing: 16) {
+                // App Icon
+                if let appIcon = NSImage(named: "AppIcon") {
+                    Image(nsImage: appIcon)
+                        .resizable()
+                        .frame(width: 64, height: 64)
+                        .cornerRadius(12)
+                } else {
+                    Text("μ")
+                        .font(.system(size: 32, weight: .bold, design: .monospaced))
+                        .foregroundColor(DesignSystem.accent)
+                        .frame(width: 64, height: 64)
+                        .background(DesignSystem.bgSecondary)
+                        .cornerRadius(12)
+                }
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("μCapture")
+                        .font(DesignSystem.monoLarge)
+                        .foregroundColor(DesignSystem.textPrimary)
+                    
+                    Text("v\(appVersion)")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(DesignSystem.accent)
+                    
+                    Text("Native macOS capture app")
+                        .font(DesignSystem.monoSmall)
+                        .foregroundColor(DesignSystem.textSecondary)
+                }
+            }
+            .padding(.bottom, 8)
+            
+            Divider()
+                .background(DesignSystem.border)
+            
+            // Company Info
+            SectionHeader(title: "DEVELOPER")
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("CAVORT Konzepte GmbH")
+                    .font(DesignSystem.mono)
+                    .foregroundColor(DesignSystem.textPrimary)
+                
+                Text("Waldstr. 122")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+                
+                Text("63263 Neu-Isenburg, Deutschland")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+            }
+            
+            HStack(spacing: 24) {
+                Button(action: { openURL("mailto:info@cavort.de") }) {
+                    HStack(spacing: 6) {
+                        Text("")  // nf-fa-envelope
+                            .font(DesignSystem.mono)
+                        Text("info@cavort.de")
+                            .font(DesignSystem.monoSmall)
+                    }
+                    .foregroundColor(DesignSystem.accentBlue)
+                }
+                .buttonStyle(.plain)
+                
+                Button(action: { openURL("https://cavort.de") }) {
+                    HStack(spacing: 6) {
+                        Text("")  // nf-fa-globe
+                            .font(DesignSystem.mono)
+                        Text("cavort.de")
+                            .font(DesignSystem.monoSmall)
+                    }
+                    .foregroundColor(DesignSystem.accentBlue)
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.top, 4)
+            
+            Divider()
+                .background(DesignSystem.border)
+                .padding(.vertical, 8)
+            
+            // License
+            SectionHeader(title: "LICENSE")
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Non-Commercial Use Only")
+                    .font(DesignSystem.mono)
+                    .foregroundColor(DesignSystem.textPrimary)
+                
+                Text("Free for personal and educational use.")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+                
+                Text("Commercial use requires a separate license.")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+            }
+            
+            Button(action: { openURL("https://github.com/cvrt-gmbh/mu-capture") }) {
+                HStack(spacing: 6) {
+                    Text("")  // nf-fa-github
+                        .font(DesignSystem.mono)
+                    Text("VIEW ON GITHUB")
+                        .font(DesignSystem.monoSmall)
+                }
+                .foregroundColor(DesignSystem.textSecondary)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 4)
+            
+            Spacer()
+            
+            // Copyright
+            Text("© 2026 CAVORT Konzepte GmbH. All rights reserved.")
+                .font(DesignSystem.monoSmall)
+                .foregroundColor(DesignSystem.textSecondary.opacity(0.6))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(24)
+    }
+    
     // MARK: - Helpers
+    
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+    }
+    
+    private func openURL(_ urlString: String) {
+        if let url = URL(string: urlString) {
+            NSWorkspace.shared.open(url)
+        }
+    }
     
     private var folderExists: Bool {
         let path = NSString(string: settings.savePath).expandingTildeInPath
@@ -578,10 +721,12 @@ struct TabButton: View {
     var body: some View {
         Button(action: { selectedTab = index }) {
             Text("/ \(title)")
-                .font(DesignSystem.mono)
+                .font(DesignSystem.monoSmall)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
                 .foregroundColor(selectedTab == index ? DesignSystem.accent : DesignSystem.textSecondary)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 10)
                 .background(selectedTab == index ? DesignSystem.accent.opacity(0.1) : Color.clear)
         }
         .buttonStyle(.plain)

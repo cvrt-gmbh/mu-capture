@@ -96,6 +96,8 @@ Click on the device name in the header bar to see available devices and switch i
 - **Storage** - Save path and file formats
 - **Naming** - Filename prefix, date format, suffix
 - **Keys** - Customize keyboard shortcuts
+- **Feedback** - Screen flash and shutter sound options
+- **Info** - App version, developer info, license
 
 ## Development
 

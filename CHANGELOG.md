@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-01-25
+
+### Added
+- **INFO tab** in Settings - Shows app version, developer info (CAVORT Konzepte GmbH), license, and GitHub link
+
+### Fixed
+- **ESC key** now properly closes the Settings panel
+- **Tab bar wrapping** - Settings panel wider (620px min) with compact tabs to fit all 6 tabs without line breaks
+
 ## [1.0.2] - 2026-01-25
 
 ### Fixed
@@ -81,13 +90,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.3 | 2026-01-25 | INFO tab, ESC key fix, tab bar fix |
 | 1.0.2 | 2026-01-25 | App bundle renamed for Spotlight compatibility |
 | 1.0.1 | 2026-01-25 | Version fix, centered icon, Homebrew support |
 | 1.0.0 | 2026-01-25 | Rebrand to μCapture, Catppuccin design, Homebrew support |
 | 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cvrt-gmbh/mu-capture/compare/v0.2.0...v1.0.0
