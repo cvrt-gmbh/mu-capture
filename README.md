@@ -20,11 +20,10 @@ Native macOS app for capturing microscope images and videos via capture cards (E
 
 ## Installation
 
-### Homebrew (Recommended)
+### Homebrew
 
 ```bash
-brew tap cvrt-gmbh/mu-capture
-brew install --cask mucapture
+brew install --cask https://raw.githubusercontent.com/cvrt-gmbh/mu-capture/main/Casks/mucapture.rb
 ```
 
 ### Manual Download
