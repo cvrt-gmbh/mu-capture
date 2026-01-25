@@ -9,7 +9,7 @@ set -e
 APP_NAME="MuCapture"
 DISPLAY_NAME="μCapture"
 BUILD_DIR=".build/release"
-APP_BUNDLE="$DISPLAY_NAME.app"
+APP_BUNDLE="$APP_NAME.app"  # Use ASCII name for Spotlight compatibility
 CONTENTS_DIR="$APP_BUNDLE/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"

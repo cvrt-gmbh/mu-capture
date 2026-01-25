@@ -40,7 +40,7 @@ brew install cvrt-gmbh/cask/mucapture
 
 ### Manual Download
 
-Download the latest release from [Releases](https://github.com/cvrt-gmbh/mu-capture/releases) and drag `μCapture.app` to `/Applications/`.
+Download the latest release from [Releases](https://github.com/cvrt-gmbh/mu-capture/releases) and drag `MuCapture.app` to `/Applications/`.
 
 ### Build from Source
 
@@ -48,7 +48,7 @@ Download the latest release from [Releases](https://github.com/cvrt-gmbh/mu-capt
 git clone https://github.com/cvrt-gmbh/mu-capture.git
 cd mu-capture
 ./build-app.sh
-cp -r 'μCapture.app' /Applications/
+cp -r 'MuCapture.app' /Applications/
 ```
 
 ## First Launch (Gatekeeper)
@@ -57,11 +57,11 @@ Since the app is not notarized with Apple, macOS may block it on first launch wi
 
 **Option 1: Terminal command (recommended)**
 ```bash
-sudo xattr -cr "/Applications/μCapture.app"
+sudo xattr -cr "/Applications/MuCapture.app"
 ```
 
 **Option 2: Right-click method**
-1. Right-click (or Ctrl+click) `μCapture.app` in Finder
+1. Right-click (or Ctrl+click) `MuCapture.app` in Finder
 2. Select "Open" from the context menu
 3. Click "Open" in the dialog that appears
 
