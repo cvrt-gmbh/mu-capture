@@ -1,11 +1,26 @@
 # Changelog
 
-All notable changes to MikroskopCapture will be documented in this file.
+All notable changes to μCapture will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0] - 2026-01-25
+
+### Changed
+- **Rebranded** from MikroskopCapture to μCapture (MuCapture)
+- **New app icon** - Catppuccin Mocha themed μ symbol
+- **New design system** - Catppuccin Mocha color palette
+- **Bundled font** - JetBrains Mono Nerd Font (no system dependency)
+- **License** - Changed to Non-Commercial license
+- **Homebrew support** - `brew tap cvrt-gmbh/mu-capture && brew install --cask mucapture`
+
+### Added
+- Quick capture shortcuts (`⇧F`, `⇧V`) for instant capture without dialog
+- Custom keybindings configuration in settings
+- Homebrew Cask formula for easy installation
 
 ## [0.2.0] - 2026-01-07
 
@@ -39,7 +54,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Date in Filename** - Configurable date format options
 - **Prefix/Suffix** - Custom filename prefix and suffix
 - **Network Storage** - Support for saving to network drives
-- **8-bit Terminal Design** - Clean retro aesthetic with SF Mono font
 
 ### Technical
 - Built with Swift 5.9 and SwiftUI
@@ -53,9 +67,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.0 | 2026-01-25 | Rebrand to μCapture, Catppuccin design, Homebrew support |
 | 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/cvrt-gmbh/mikroskop-capture/compare/v0.2.0...HEAD
-[0.2.0]: https://github.com/cvrt-gmbh/mikroskop-capture/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/cvrt-gmbh/mikroskop-capture/releases/tag/v0.1.0
+[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cvrt-gmbh/mu-capture/compare/v0.2.0...v1.0.0
+[0.2.0]: https://github.com/cvrt-gmbh/mu-capture/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/cvrt-gmbh/mu-capture/releases/tag/v0.1.0

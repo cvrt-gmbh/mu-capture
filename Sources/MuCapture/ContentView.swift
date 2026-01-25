@@ -8,27 +8,55 @@
 
 import SwiftUI
 import AVFoundation
+import AppKit
 
-// MARK: - Design Constants
+// MARK: - Design Constants (Catppuccin Mocha)
 
 struct DesignSystem {
-    // Monospace Font
-    static let mono = Font.custom("SF Mono", size: 14)
-    static let monoSmall = Font.custom("SF Mono", size: 12)
-    static let monoLarge = Font.custom("SF Mono", size: 16)
-    static let monoXL = Font.custom("SF Mono", size: 20)
-    static let monoTitle = Font.custom("SF Mono", size: 20)
+    // Monospace Font - JetBrains Mono Nerd Font (bundled with app)
+    private static let fontName = "JetBrainsMonoNerdFont-Regular"
+    private static let fontNameMedium = "JetBrainsMonoNerdFont-Medium"
+    private static let fontNameBold = "JetBrainsMonoNerdFont-Bold"
     
-    // Colors - Muted, clean
-    static let bg = Color(hex: "0D0D0D")
-    static let bgSecondary = Color(hex: "1A1A1A")
-    static let border = Color(hex: "333333")
-    static let textPrimary = Color(hex: "E5E5E5")
-    static let textSecondary = Color(hex: "808080")
-    static let accent = Color(hex: "00FF88")  // Terminal green
-    static let accentBlue = Color(hex: "4A9EFF")
-    static let accentOrange = Color(hex: "FF9F43")
-    static let danger = Color(hex: "FF5555")
+    static let mono = Font.custom(fontName, size: 14)
+    static let monoSmall = Font.custom(fontName, size: 12)
+    static let monoLarge = Font.custom(fontNameMedium, size: 16)
+    static let monoXL = Font.custom(fontNameMedium, size: 20)
+    static let monoTitle = Font.custom(fontNameBold, size: 20)
+    
+    // Catppuccin Mocha - Base Colors
+    static let bg = Color(hex: "1e1e2e")           // Base
+    static let bgSecondary = Color(hex: "181825")  // Mantle
+    static let bgTertiary = Color(hex: "11111b")   // Crust
+    static let surface0 = Color(hex: "313244")     // Surface0
+    static let surface1 = Color(hex: "45475a")     // Surface1
+    static let surface2 = Color(hex: "585b70")     // Surface2
+    
+    // Catppuccin Mocha - Overlay Colors
+    static let overlay0 = Color(hex: "6c7086")
+    static let overlay1 = Color(hex: "7f849c")
+    static let overlay2 = Color(hex: "9399b2")
+    
+    // Catppuccin Mocha - Text Colors
+    static let textPrimary = Color(hex: "cdd6f4")   // Text
+    static let textSecondary = Color(hex: "a6adc8") // Subtext0
+    static let textTertiary = Color(hex: "bac2de")  // Subtext1
+    
+    // Catppuccin Mocha - Border
+    static let border = Color(hex: "45475a")        // Surface1
+    
+    // Catppuccin Mocha - Accent Colors
+    static let accent = Color(hex: "a6e3a1")        // Green
+    static let accentBlue = Color(hex: "89b4fa")    // Blue
+    static let accentOrange = Color(hex: "fab387")  // Peach
+    static let danger = Color(hex: "f38ba8")        // Red
+    static let warning = Color(hex: "f9e2af")       // Yellow
+    static let mauve = Color(hex: "cba6f7")         // Mauve
+    static let teal = Color(hex: "94e2d5")          // Teal
+    static let sky = Color(hex: "89dceb")           // Sky
+    static let lavender = Color(hex: "b4befe")      // Lavender
+    static let rosewater = Color(hex: "f5e0dc")     // Rosewater
+    static let flamingo = Color(hex: "f2cdcd")      // Flamingo
 }
 
 extension Color {
@@ -66,6 +94,8 @@ struct ContentView: View {
     @State private var isVideo = false
     @State private var captureTimestamp: Date?
     @State private var showDeviceMenu = false
+    @State private var isQuickVideoCapture = false
+    @State private var showFlash = false
     
     var body: some View {
         ZStack {
@@ -81,6 +111,14 @@ struct ContentView: View {
                 
                 // Bottom Buttons (Overlay)
                 buttonBar
+            }
+            
+            // Flash overlay
+            if showFlash {
+                Color.white
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
             }
         }
         .background(DesignSystem.bg)
@@ -123,20 +161,40 @@ struct ContentView: View {
         // Don't handle if dialog is showing
         guard !showingSaveDialog && !showSettings else { return event }
         
-        switch event.charactersIgnoringModifiers?.lowercased() {
-        case "f":
+        // Check custom keybindings
+        
+        // Quick Photo (no dialog)
+        if settings.quickPhotoKey.matches(event) {
+            if cameraManager.previewImage != nil && !cameraManager.isRecording {
+                quickCapturePhoto()
+                return nil
+            }
+        }
+        
+        // Quick Video (no dialog)
+        if settings.quickVideoKey.matches(event) {
+            if cameraManager.previewImage != nil || cameraManager.isRecording {
+                toggleVideoRecording(quick: true)
+                return nil
+            }
+        }
+        
+        // Regular Photo (with dialog)
+        if settings.photoKey.matches(event) {
             if cameraManager.previewImage != nil && !cameraManager.isRecording {
                 capturePhoto()
                 return nil
             }
-        case "v":
+        }
+        
+        // Regular Video (with dialog)
+        if settings.videoKey.matches(event) {
             if cameraManager.previewImage != nil || cameraManager.isRecording {
-                toggleVideoRecording()
+                toggleVideoRecording(quick: false)
                 return nil
             }
-        default:
-            break
         }
+        
         return event
     }
     
@@ -218,7 +276,7 @@ struct ContentView: View {
             
             // Version Number with repo link (left side, next to device)
             Button(action: openRepoURL) {
-                Text("v0.2.0")
+                Text("v0.3.0")
                     .font(DesignSystem.monoSmall)
                     .foregroundColor(DesignSystem.textSecondary.opacity(0.5))
             }
@@ -311,7 +369,7 @@ struct ContentView: View {
             // FOTO Button - 50%
             OverlayButton(
                 label: "FOTO",
-                shortcut: "F",
+                shortcut: settings.photoKey.displayString,
                 color: DesignSystem.accentBlue,
                 isActive: false,
                 isDisabled: cameraManager.previewImage == nil || cameraManager.isRecording,
@@ -326,11 +384,11 @@ struct ContentView: View {
             // VIDEO Button - 50%
             OverlayButton(
                 label: cameraManager.isRecording ? "STOP [\(formatDuration(cameraManager.recordingDuration))]" : "VIDEO",
-                shortcut: "V",
+                shortcut: settings.videoKey.displayString,
                 color: cameraManager.isRecording ? DesignSystem.danger : DesignSystem.accentOrange,
                 isActive: cameraManager.isRecording,
                 isDisabled: cameraManager.previewImage == nil && !cameraManager.isRecording,
-                action: toggleVideoRecording
+                action: { toggleVideoRecording(quick: false) }
             )
         }
         .frame(height: 70)
@@ -350,23 +408,64 @@ struct ContentView: View {
         }
         
         cameraManager.onVideoCaptured = { (url: URL) in
-            pendingVideoURL = url
-            pendingImage = nil
-            isVideo = true
-            customFileName = ""
-            captureTimestamp = Date()
-            showingSaveDialog = true
+            if isQuickVideoCapture {
+                // Quick capture - save immediately without dialog (with counter increment)
+                let timestamp = Date()
+                let fileName = settings.generateFileName(baseName: "", isVideo: true, timestamp: timestamp, incrementCounter: true)
+                let destinationURL = settings.fullPath(for: fileName)
+                
+                let directory = destinationURL.deletingLastPathComponent()
+                try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+                
+                do {
+                    try FileManager.default.moveItem(at: url, to: destinationURL)
+                } catch {
+                    cameraManager.error = "Video speichern fehlgeschlagen: \(error.localizedDescription)"
+                }
+                isQuickVideoCapture = false
+            } else {
+                // Normal capture - show dialog
+                pendingVideoURL = url
+                pendingImage = nil
+                isVideo = true
+                customFileName = ""
+                captureTimestamp = Date()
+                showingSaveDialog = true
+            }
         }
     }
     
     private func capturePhoto() {
+        triggerCaptureFeedback()
         cameraManager.capturePhoto()
     }
     
-    private func toggleVideoRecording() {
+    private func quickCapturePhoto() {
+        guard let image = cameraManager.previewImage else { return }
+        
+        triggerCaptureFeedback()
+        
+        // Generate auto filename and save immediately (with counter increment)
+        let timestamp = Date()
+        let fileName = settings.generateFileName(baseName: "", isVideo: false, timestamp: timestamp, incrementCounter: true)
+        let destinationURL = settings.fullPath(for: fileName)
+        
+        let directory = destinationURL.deletingLastPathComponent()
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        
+        saveImage(image, to: destinationURL)
+    }
+    
+    private func toggleVideoRecording(quick: Bool = false) {
         if cameraManager.isRecording {
+            // Stop recording - quick mode saves without dialog
+            if quick {
+                isQuickVideoCapture = true
+            }
             cameraManager.stopVideoRecording()
         } else {
+            // Start recording - remember if this is quick mode
+            isQuickVideoCapture = quick
             cameraManager.startVideoRecording()
         }
     }
@@ -390,7 +489,7 @@ struct ContentView: View {
     }
     
     private func saveFile() {
-        let fileName = settings.generateFileName(baseName: customFileName, isVideo: isVideo, timestamp: captureTimestamp ?? Date())
+        let fileName = settings.generateFileName(baseName: customFileName, isVideo: isVideo, timestamp: captureTimestamp ?? Date(), incrementCounter: true)
         let destinationURL = settings.fullPath(for: fileName)
         
         let directory = destinationURL.deletingLastPathComponent()
@@ -461,6 +560,31 @@ struct ContentView: View {
         let minutes = Int(duration) / 60
         let seconds = Int(duration) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    // MARK: - Capture Feedback
+    
+    private func triggerCaptureFeedback() {
+        // Flash
+        if settings.flashEnabled {
+            withAnimation(.easeOut(duration: 0.05)) {
+                showFlash = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation(.easeIn(duration: 0.15)) {
+                    showFlash = false
+                }
+            }
+        }
+        
+        // Sound
+        if settings.soundEnabled {
+            NSSound.beep()  // System beep as fallback
+            // Alternative: Use system camera shutter sound
+            if let sound = NSSound(named: "Tink") {
+                sound.play()
+            }
+        }
     }
 }
 

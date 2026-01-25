@@ -22,6 +22,8 @@ struct SettingsView: View {
                 TabButton(title: "DEVICE", index: 0, selectedTab: $selectedTab)
                 TabButton(title: "STORAGE", index: 1, selectedTab: $selectedTab)
                 TabButton(title: "NAMING", index: 2, selectedTab: $selectedTab)
+                TabButton(title: "KEYS", index: 3, selectedTab: $selectedTab)
+                TabButton(title: "FEEDBACK", index: 4, selectedTab: $selectedTab)
                 Spacer()
             }
             .frame(maxWidth: .infinity)
@@ -39,6 +41,10 @@ struct SettingsView: View {
                     storageTab
                 case 2:
                     namingTab
+                case 3:
+                    keysTab
+                case 4:
+                    feedbackTab
                 default:
                     deviceTab
                 }
@@ -296,6 +302,89 @@ struct SettingsView: View {
                 }
             }
             
+            Divider()
+                .background(DesignSystem.border)
+                .padding(.vertical, 8)
+            
+            // Counter Toggle
+            HStack {
+                Text("/ COUNTER IN FILENAME")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+                
+                Spacer()
+                
+                Button(action: { settings.includeCounter.toggle() }) {
+                    Text(settings.includeCounter ? "[ ON ]" : "[ OFF ]")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(settings.includeCounter ? DesignSystem.accent : DesignSystem.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
+            
+            if settings.includeCounter {
+                HStack(spacing: 24) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("/ DIGITS")
+                            .font(DesignSystem.monoSmall)
+                            .foregroundColor(DesignSystem.textSecondary)
+                        
+                        HStack(spacing: 8) {
+                            ForEach([3, 4, 5, 6], id: \.self) { digits in
+                                Button(action: { settings.counterDigits = digits }) {
+                                    Text("\(digits)")
+                                        .font(DesignSystem.monoSmall)
+                                        .foregroundColor(settings.counterDigits == digits ? DesignSystem.bg : DesignSystem.textSecondary)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(settings.counterDigits == digits ? DesignSystem.accent : Color.clear)
+                                        .overlay(
+                                            Rectangle()
+                                                .stroke(settings.counterDigits == digits ? DesignSystem.accent : DesignSystem.border, lineWidth: 1)
+                                        )
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("/ CURRENT")
+                            .font(DesignSystem.monoSmall)
+                            .foregroundColor(DesignSystem.textSecondary)
+                        
+                        HStack(spacing: 16) {
+                            HStack(spacing: 4) {
+                                Text("FOTO:")
+                                    .font(DesignSystem.monoSmall)
+                                    .foregroundColor(DesignSystem.textSecondary)
+                                Text(String(format: "%0\(settings.counterDigits)d", settings.photoCounter))
+                                    .font(DesignSystem.mono)
+                                    .foregroundColor(DesignSystem.accentBlue)
+                            }
+                            
+                            HStack(spacing: 4) {
+                                Text("VIDEO:")
+                                    .font(DesignSystem.monoSmall)
+                                    .foregroundColor(DesignSystem.textSecondary)
+                                Text(String(format: "%0\(settings.counterDigits)d", settings.videoCounter))
+                                    .font(DesignSystem.mono)
+                                    .foregroundColor(DesignSystem.accentOrange)
+                            }
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: { settings.resetCounters() }) {
+                        Text("[ RESET ]")
+                            .font(DesignSystem.monoSmall)
+                            .foregroundColor(DesignSystem.textSecondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            
             Spacer()
             
             // Preview
@@ -309,6 +398,149 @@ struct SettingsView: View {
                     .foregroundColor(DesignSystem.accent)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(24)
+    }
+    
+    // MARK: - Feedback Tab
+    
+    private var feedbackTab: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            SectionHeader(title: "CAPTURE FEEDBACK")
+            
+            Text("Visual and audio feedback when capturing photos or videos.")
+                .font(DesignSystem.monoSmall)
+                .foregroundColor(DesignSystem.textSecondary.opacity(0.7))
+                .padding(.bottom, 8)
+            
+            // Flash Toggle
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("/ SCREEN FLASH")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(DesignSystem.textPrimary)
+                    
+                    Text("Brief white flash on capture")
+                        .font(DesignSystem.monoSmall)
+                        .foregroundColor(DesignSystem.textSecondary.opacity(0.7))
+                }
+                
+                Spacer()
+                
+                Button(action: { settings.flashEnabled.toggle() }) {
+                    Text(settings.flashEnabled ? "[ ON ]" : "[ OFF ]")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(settings.flashEnabled ? DesignSystem.accent : DesignSystem.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.vertical, 8)
+            
+            Divider()
+                .background(DesignSystem.border)
+            
+            // Sound Toggle
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("/ SHUTTER SOUND")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(DesignSystem.textPrimary)
+                    
+                    Text("Camera shutter sound on capture")
+                        .font(DesignSystem.monoSmall)
+                        .foregroundColor(DesignSystem.textSecondary.opacity(0.7))
+                }
+                
+                Spacer()
+                
+                Button(action: { settings.soundEnabled.toggle() }) {
+                    Text(settings.soundEnabled ? "[ ON ]" : "[ OFF ]")
+                        .font(DesignSystem.mono)
+                        .foregroundColor(settings.soundEnabled ? DesignSystem.accent : DesignSystem.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.vertical, 8)
+            
+            Spacer()
+            
+            // Note
+            HStack(spacing: 8) {
+                Text("●")
+                    .font(.system(size: 8))
+                    .foregroundColor(DesignSystem.textSecondary)
+                Text("Both options are disabled by default")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary.opacity(0.7))
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(24)
+    }
+    
+    // MARK: - Keys Tab
+    
+    private var keysTab: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            SectionHeader(title: "KEYBOARD SHORTCUTS")
+            
+            Text("Click on a key binding to change it. Press ESC to cancel.")
+                .font(DesignSystem.monoSmall)
+                .foregroundColor(DesignSystem.textSecondary.opacity(0.7))
+                .padding(.bottom, 8)
+            
+            // Standard captures (with dialog)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("/ CAPTURE (with naming dialog)")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+                
+                KeyBindingRow(
+                    label: "FOTO",
+                    binding: $settings.photoKey,
+                    color: DesignSystem.accentBlue
+                )
+                
+                KeyBindingRow(
+                    label: "VIDEO",
+                    binding: $settings.videoKey,
+                    color: DesignSystem.accentOrange
+                )
+            }
+            
+            Divider()
+                .background(DesignSystem.border)
+                .padding(.vertical, 8)
+            
+            // Quick captures (no dialog)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("/ QUICK CAPTURE (auto-save, no dialog)")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+                
+                KeyBindingRow(
+                    label: "QUICK FOTO",
+                    binding: $settings.quickPhotoKey,
+                    color: DesignSystem.accentBlue
+                )
+                
+                KeyBindingRow(
+                    label: "QUICK VIDEO",
+                    binding: $settings.quickVideoKey,
+                    color: DesignSystem.accentOrange
+                )
+            }
+            
+            Spacer()
+            
+            // Reset button
+            Button(action: { settings.resetKeybindings() }) {
+                Text("[ RESET TO DEFAULTS ]")
+                    .font(DesignSystem.monoSmall)
+                    .foregroundColor(DesignSystem.textSecondary)
+            }
+            .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(24)
@@ -448,5 +680,69 @@ struct DateFormatRow: View {
             .padding(.vertical, 4)
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Key Binding Row
+
+struct KeyBindingRow: View {
+    let label: String
+    @Binding var binding: KeyBinding
+    let color: Color
+    
+    @State private var isRecording = false
+    @State private var eventMonitor: Any?
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            Text(label)
+                .font(DesignSystem.mono)
+                .foregroundColor(DesignSystem.textPrimary)
+                .frame(width: 120, alignment: .leading)
+            
+            Button(action: startRecording) {
+                Text(isRecording ? "PRESS KEY..." : "[ \(binding.displayString) ]")
+                    .font(DesignSystem.mono)
+                    .foregroundColor(isRecording ? DesignSystem.accentOrange : color)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(isRecording ? DesignSystem.accentOrange.opacity(0.1) : DesignSystem.bg)
+                    .overlay(
+                        Rectangle()
+                            .stroke(isRecording ? DesignSystem.accentOrange : DesignSystem.border, lineWidth: 1)
+                    )
+                    .animation(.easeInOut(duration: 0.15), value: isRecording)
+            }
+            .buttonStyle(.plain)
+            
+            Spacer()
+        }
+    }
+    
+    private func startRecording() {
+        isRecording = true
+        
+        // Add event monitor to capture next key press
+        eventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            // ESC cancels
+            if event.keyCode == 53 { // ESC key
+                self.stopRecording()
+                return nil
+            }
+            
+            // Capture the key binding
+            let newBinding = KeyBinding.from(event)
+            self.binding = newBinding
+            self.stopRecording()
+            return nil
+        }
+    }
+    
+    private func stopRecording() {
+        isRecording = false
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+            eventMonitor = nil
+        }
     }
 }

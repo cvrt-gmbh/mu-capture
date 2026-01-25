@@ -1,0 +1,14 @@
+# Local instruction files (never commit)
+AGENTS.md
+CLAUDE.md
+PROGRESS.md
+
+# Build artifacts
+.build/
+.DS_Store
+*.xcodeproj
+xcuserdata/
+DerivedData/
+
+# App bundle (built locally)
+*.app/

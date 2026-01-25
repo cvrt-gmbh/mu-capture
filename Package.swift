@@ -2,14 +2,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "MikroskopCapture",
+    name: "MuCapture",
     platforms: [
         .macOS(.v14)
     ],
     targets: [
         .executableTarget(
-            name: "MikroskopCapture",
-            path: "Sources/MikroskopCapture"
+            name: "MuCapture",
+            path: "Sources/MuCapture"
         )
     ]
 )

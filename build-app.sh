@@ -1,63 +1,71 @@
 #!/bin/bash
 #
-# Build-Script für MikroskopCapture
-# Erstellt eine .app Bundle aus dem Swift Package
+# Build script for μCapture
+# Creates a .app bundle from the Swift Package
 #
 
 set -e
 
-APP_NAME="MikroskopCapture"
+APP_NAME="MuCapture"
+DISPLAY_NAME="μCapture"
 BUILD_DIR=".build/release"
-APP_BUNDLE="$APP_NAME.app"
+APP_BUNDLE="$DISPLAY_NAME.app"
 CONTENTS_DIR="$APP_BUNDLE/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
 
-echo "🔨 Building $APP_NAME..."
+echo "Building $DISPLAY_NAME..."
 
 # Release Build
 swift build -c release
 
-echo "📦 Creating app bundle..."
+echo "Creating app bundle..."
 
-# Erstelle App Bundle Struktur
+# Create App Bundle structure
 rm -rf "$APP_BUNDLE"
 mkdir -p "$MACOS_DIR"
 mkdir -p "$RESOURCES_DIR"
+mkdir -p "$RESOURCES_DIR/Fonts"
 
-# Kopiere Executable
+# Copy Executable
 cp "$BUILD_DIR/$APP_NAME" "$MACOS_DIR/"
 
-# Kopiere Info.plist
+# Copy Info.plist
 cp "Sources/$APP_NAME/Info.plist" "$CONTENTS_DIR/"
 
-# Kopiere App Icon
+# Copy App Icon
 if [ -f "AppIcon.icns" ]; then
     cp "AppIcon.icns" "$RESOURCES_DIR/"
-    echo "🎨 App icon added"
+    echo "App icon added"
 fi
 
-# Erstelle PkgInfo
+# Copy bundled fonts
+if [ -d "Resources/Fonts" ]; then
+    cp Resources/Fonts/*.ttf "$RESOURCES_DIR/Fonts/" 2>/dev/null || true
+    echo "Fonts bundled"
+fi
+
+# Create PkgInfo
 echo -n "APPL????" > "$CONTENTS_DIR/PkgInfo"
 
-# Setze Executable-Rechte
+# Set executable permissions
 chmod +x "$MACOS_DIR/$APP_NAME"
 
-# Code Signing (Ad-hoc) - verhindert "App ist beschädigt" auf anderen Macs
-echo "🔐 Signing app bundle..."
+# Code Signing (Ad-hoc) - prevents "app is damaged" on other Macs
+echo "Signing app bundle..."
 codesign --force --deep --sign - "$APP_BUNDLE"
 
-# Quarantäne-Attribut entfernen (für lokale Builds)
+# Remove quarantine attribute (for local builds)
 xattr -cr "$APP_BUNDLE" 2>/dev/null || true
 
-echo "✅ App bundle created and signed: $APP_BUNDLE"
+echo "App bundle created and signed: $APP_BUNDLE"
 echo ""
-echo "📍 Um die App zu installieren:"
-echo "   cp -r $APP_BUNDLE /Applications/"
+echo "To install the app:"
+echo "   cp -r '$APP_BUNDLE' /Applications/"
 echo ""
-echo "🚀 Oder direkt starten:"
-echo "   open $APP_BUNDLE"
+echo "Or launch directly:"
+echo "   open '$APP_BUNDLE'"
 echo ""
-echo "💡 Falls auf anderem Mac 'beschädigt' erscheint:"
-echo "   xattr -cr /Pfad/zu/$APP_BUNDLE"
-echo "   oder: Rechtsklick → Öffnen (beim ersten Start)"
+echo "If 'damaged' appears on another Mac:"
+echo "   xattr -cr /path/to/$APP_BUNDLE"
+echo "   or: Right-click -> Open (on first launch)"

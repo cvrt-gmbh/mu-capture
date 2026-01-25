@@ -3,32 +3,34 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>MikroskopCapture</string>
+    <string>MuCapture</string>
     <key>CFBundleDisplayName</key>
-    <string>Mikroskop Capture</string>
+    <string>μCapture</string>
     <key>CFBundleIdentifier</key>
-    <string>de.coffeebreak.MikroskopCapture</string>
+    <string>de.cvrt.MuCapture</string>
     <key>CFBundleVersion</key>
-    <string>0.2.0</string>
+    <string>1.0.0</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.2.0</string>
+    <string>1.0.0</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleExecutable</key>
-    <string>MikroskopCapture</string>
+    <string>MuCapture</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
     <key>NSCameraUsageDescription</key>
-    <string>Diese App benötigt Zugriff auf die Kamera/Capture-Karte um das Mikroskop-Bild anzuzeigen und aufzunehmen.</string>
+    <string>μCapture needs camera access to display and capture the microscope feed.</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>Diese App kann optional Audio aufnehmen.</string>
+    <string>μCapture can optionally record audio with video.</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.medical</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
+    <key>ATSApplicationFontsPath</key>
+    <string>Fonts</string>
 </dict>
 </plist>
