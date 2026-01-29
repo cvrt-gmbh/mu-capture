@@ -5,6 +5,7 @@ Native macOS app for capturing microscope images and videos via capture cards (E
 ![macOS](https://img.shields.io/badge/macOS-14.0+-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9+-orange)
 ![License](https://img.shields.io/badge/License-Non--Commercial-yellow)
+![Notarized](https://img.shields.io/badge/Apple-Notarized-brightgreen)
 
 ## Features
 
@@ -51,21 +52,14 @@ cd mu-capture
 cp -r 'MuCapture.app' /Applications/
 ```
 
-## First Launch (Gatekeeper)
+## First Launch
 
-Since the app is not notarized with Apple, macOS may block it on first launch with "Apple could not verify μCapture is free of malware."
+The app is **signed with Developer ID and notarized by Apple**, so it opens without any Gatekeeper warnings. Simply double-click to launch.
 
-**Option 1: Terminal command (recommended)**
-```bash
-sudo xattr -cr "/Applications/MuCapture.app"
-```
-
-**Option 2: Right-click method**
-1. Right-click (or Ctrl+click) `MuCapture.app` in Finder
-2. Select "Open" from the context menu
-3. Click "Open" in the dialog that appears
-
-This only needs to be done once.
+> **Note:** If you build from source without notarization, macOS may show a warning. Fix with:
+> ```bash
+> sudo xattr -cr "/Applications/MuCapture.app"
+> ```
 
 ## Requirements
 
@@ -110,8 +104,11 @@ Click on the device name in the header bar to see available devices and switch i
 # Debug build
 swift build
 
-# Release build + app bundle
+# Release build + sign with Developer ID
 ./build-app.sh
+
+# Release build + sign + notarize (for distribution)
+./build-app.sh --notarize
 
 # Run directly (without app bundle)
 swift run
