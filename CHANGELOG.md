@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.8] - 2026-02-03
+
+### Added
+- **Update checker** - Shows green arrow (↑) next to version when update available
+- **One-click upgrade** - Click arrow to open Terminal with `brew upgrade` command
+- **24h cache** - Update check results cached to avoid API spam
+
 ## [1.0.7] - 2026-02-03
 
 ### Fixed
@@ -111,6 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.8 | 2026-02-03 | Update checker with brew upgrade |
 | 1.0.7 | 2026-02-03 | Session start after permission granted |
 | 1.0.6 | 2026-02-03 | Camera entitlements for hardened runtime |
 | 1.0.5 | 2026-02-03 | Permission re-check on app activation |
@@ -122,7 +130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.7...HEAD
+[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.8...HEAD
+[1.0.8]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.4...v1.0.5
