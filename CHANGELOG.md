@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.9] - 2026-02-03
+
+### Fixed
+- **Crash on launch** - Fixed race condition causing infinite recursion in camera authorization check
+
 ## [1.0.8] - 2026-02-03
 
 ### Added
@@ -118,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.9 | 2026-02-03 | Fix crash on launch (race condition) |
 | 1.0.8 | 2026-02-03 | Update checker with brew upgrade |
 | 1.0.7 | 2026-02-03 | Session start after permission granted |
 | 1.0.6 | 2026-02-03 | Camera entitlements for hardened runtime |
@@ -130,7 +136,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.8...HEAD
+[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.9...HEAD
+[1.0.9]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.5...v1.0.6

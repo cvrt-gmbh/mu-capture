@@ -78,9 +78,8 @@ class CameraManager: NSObject, ObservableObject {
 
     private func checkAndRequestAuthorization() {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
-        DispatchQueue.main.async {
-            self.authorizationStatus = status
-        }
+        // Set synchronously to avoid race condition with startSession()
+        self.authorizationStatus = status
 
         switch status {
         case .authorized:
