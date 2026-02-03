@@ -85,12 +85,14 @@ class CameraManager: NSObject, ObservableObject {
         switch status {
         case .authorized:
             discoverDevices()
+            startSession()
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
                 DispatchQueue.main.async {
                     self?.authorizationStatus = granted ? .authorized : .denied
                     if granted {
                         self?.discoverDevices()
+                        self?.startSession()
                     } else {
                         self?.error = "Camera access denied. Please enable in System Settings > Privacy & Security > Camera."
                     }
