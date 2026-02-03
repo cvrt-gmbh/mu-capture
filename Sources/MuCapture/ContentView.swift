@@ -84,9 +84,10 @@ extension Color {
 struct ContentView: View {
     @Binding var showSettings: Bool
     @StateObject private var cameraManager = CameraManager()
+    @StateObject private var updateChecker = UpdateChecker()
     @ObservedObject private var settings = AppSettings.shared
     @Environment(\.openWindow) private var openWindow
-    
+
     @State private var showingSaveDialog = false
     @State private var pendingImage: NSImage?
     @State private var pendingVideoURL: URL?
@@ -125,7 +126,8 @@ struct ContentView: View {
         .onAppear {
             setupCallbacks()
             cameraManager.startSession()
-            
+            updateChecker.checkForUpdates()
+
             // Setup keyboard monitoring
             NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                 return handleKeyEvent(event)
@@ -274,13 +276,28 @@ struct ContentView: View {
                 .background(DesignSystem.bgSecondary)
             }
             
-            // Version Number with repo link (left side, next to device)
-            Button(action: openRepoURL) {
-                Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
-                    .font(DesignSystem.monoSmall)
-                    .foregroundColor(DesignSystem.textSecondary.opacity(0.5))
+            // Version Number with update indicator
+            Button(action: {
+                if updateChecker.updateAvailable {
+                    updateChecker.runBrewUpgrade()
+                } else {
+                    openRepoURL()
+                }
+            }) {
+                HStack(spacing: 4) {
+                    Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?")")
+                        .font(DesignSystem.monoSmall)
+                        .foregroundColor(DesignSystem.textSecondary.opacity(0.5))
+
+                    if updateChecker.updateAvailable {
+                        Text("↑")
+                            .font(DesignSystem.monoSmall)
+                            .foregroundColor(DesignSystem.accent)
+                    }
+                }
             }
             .buttonStyle(.plain)
+            .help(updateChecker.updateAvailable ? "Update available: v\(updateChecker.latestVersion ?? "?") - Click to upgrade" : "Open repository")
             .onHover { hovering in
                 if hovering {
                     NSCursor.pointingHand.push()
