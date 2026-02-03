@@ -336,18 +336,49 @@ struct ContentView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if cameraManager.authorizationStatus == .denied || cameraManager.authorizationStatus == .restricted {
+                    // Permission Denied State
+                    VStack(spacing: 20) {
+                        Text("⊘")
+                            .font(.system(size: 48))
+                            .foregroundColor(DesignSystem.danger)
+
+                        VStack(spacing: 8) {
+                            Text("/ CAMERA ACCESS DENIED")
+                                .font(DesignSystem.monoLarge)
+                                .foregroundColor(DesignSystem.danger)
+
+                            Text("Enable camera access in System Settings")
+                                .font(DesignSystem.monoSmall)
+                                .foregroundColor(DesignSystem.textSecondary.opacity(0.6))
+                        }
+
+                        Button(action: { cameraManager.openPrivacySettings() }) {
+                            Text("[ OPEN SETTINGS ]")
+                                .font(DesignSystem.mono)
+                                .foregroundColor(DesignSystem.accent)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .overlay(
+                                    Rectangle()
+                                        .stroke(DesignSystem.accent, lineWidth: 1)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 8)
+                    }
                 } else {
                     // No Signal State
                     VStack(spacing: 20) {
                         Text("▢")
                             .font(.system(size: 48))
                             .foregroundColor(DesignSystem.border)
-                        
+
                         VStack(spacing: 8) {
                             Text("/ NO SIGNAL")
                                 .font(DesignSystem.monoLarge)
                                 .foregroundColor(DesignSystem.textSecondary)
-                            
+
                             if cameraManager.availableDevices.isEmpty {
                                 Text("Connect capture device")
                                     .font(DesignSystem.monoSmall)

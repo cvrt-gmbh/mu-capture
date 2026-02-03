@@ -16,6 +16,7 @@ class CameraManager: NSObject, ObservableObject {
     @Published var isRecording = false
     @Published var recordingDuration: TimeInterval = 0
     @Published var error: String?
+    @Published var authorizationStatus: AVAuthorizationStatus = .notDetermined
     
     let session = AVCaptureSession()
     private var videoOutput = AVCaptureVideoDataOutput()
@@ -36,8 +37,8 @@ class CameraManager: NSObject, ObservableObject {
     override init() {
         super.init()
         setupSession()
-        discoverDevices()
-        
+        checkAndRequestAuthorization()
+
         // Beobachte Geräteänderungen
         NotificationCenter.default.addObserver(
             self,
@@ -51,6 +52,35 @@ class CameraManager: NSObject, ObservableObject {
             name: .AVCaptureDeviceWasDisconnected,
             object: nil
         )
+    }
+
+    private func checkAndRequestAuthorization() {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        DispatchQueue.main.async {
+            self.authorizationStatus = status
+        }
+
+        switch status {
+        case .authorized:
+            discoverDevices()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
+                DispatchQueue.main.async {
+                    self?.authorizationStatus = granted ? .authorized : .denied
+                    if granted {
+                        self?.discoverDevices()
+                    } else {
+                        self?.error = "Camera access denied. Please enable in System Settings > Privacy & Security > Camera."
+                    }
+                }
+            }
+        case .denied, .restricted:
+            DispatchQueue.main.async {
+                self.error = "Camera access denied. Please enable in System Settings > Privacy & Security > Camera."
+            }
+        @unknown default:
+            break
+        }
     }
     
     private func setupSession() {
@@ -149,12 +179,24 @@ class CameraManager: NSObject, ObservableObject {
     
     func startSession() {
         guard !session.isRunning else { return }
-        
+        guard authorizationStatus == .authorized else {
+            if authorizationStatus == .notDetermined {
+                checkAndRequestAuthorization()
+            }
+            return
+        }
+
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.startRunning()
             DispatchQueue.main.async {
                 self?.isSessionRunning = self?.session.isRunning ?? false
             }
+        }
+    }
+
+    func openPrivacySettings() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Camera") {
+            NSWorkspace.shared.open(url)
         }
     }
     
