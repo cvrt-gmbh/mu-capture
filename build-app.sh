@@ -66,9 +66,9 @@ echo -n "APPL????" > "$CONTENTS_DIR/PkgInfo"
 # Set executable permissions
 chmod +x "$MACOS_DIR/$APP_NAME"
 
-# Code Signing with Developer ID
+# Code Signing with Developer ID and entitlements
 echo "Signing app bundle with Developer ID..."
-codesign --force --options runtime --sign "$SIGNING_IDENTITY" --timestamp "$APP_BUNDLE"
+codesign --force --options runtime --entitlements "entitlements.plist" --sign "$SIGNING_IDENTITY" --timestamp "$APP_BUNDLE"
 
 # Verify signature
 echo "Verifying signature..."
