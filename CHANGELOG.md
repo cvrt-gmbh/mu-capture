@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-02-03
+
+### Fixed
+- **Permission re-check** - App now detects when camera permission is granted in System Settings without restart
+
 ## [1.0.4] - 2026-02-03
 
 ### Fixed
@@ -96,6 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.5 | 2026-02-03 | Permission re-check on app activation |
 | 1.0.4 | 2026-02-03 | Camera authorization fix |
 | 1.0.3 | 2026-01-25 | INFO tab, ESC key fix, tab bar fix |
 | 1.0.2 | 2026-01-25 | App bundle renamed for Spotlight compatibility |
@@ -104,7 +110,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 0.2.0 | 2026-01-07 | Device selector dropdown, responsive settings |
 | 0.1.0 | 2026-01-07 | Initial MVP release |
 
-[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/cvrt-gmbh/mu-capture/compare/v1.0.1...v1.0.2

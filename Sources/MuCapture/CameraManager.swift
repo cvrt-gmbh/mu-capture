@@ -52,6 +52,28 @@ class CameraManager: NSObject, ObservableObject {
             name: .AVCaptureDeviceWasDisconnected,
             object: nil
         )
+
+        // Re-check authorization when app becomes active (user might have changed it in Settings)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appDidBecomeActive),
+            name: NSApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+
+    @objc private func appDidBecomeActive() {
+        let currentStatus = AVCaptureDevice.authorizationStatus(for: .video)
+
+        // Only act if status changed from denied/restricted to authorized
+        if authorizationStatus != .authorized && currentStatus == .authorized {
+            DispatchQueue.main.async {
+                self.authorizationStatus = currentStatus
+                self.error = nil
+                self.discoverDevices()
+                self.startSession()
+            }
+        }
     }
 
     private func checkAndRequestAuthorization() {
